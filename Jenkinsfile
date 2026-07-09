@@ -7,7 +7,6 @@ pipeline {
                 sh 'echo "Repo checked out successfully."'
                 sh 'ls -la'
                 sh 'git log -1'
-                sh 'll'
             }
         }
         stage('Build') {
