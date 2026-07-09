@@ -19,5 +19,10 @@ pipeline {
                 sh 'echo "Testing..."'
             }
         }
+        stage('REally') {
+            steps {
+                sh 'echo "reallying..."'
+            }
+        }
     }
 }
