@@ -4,9 +4,7 @@ pipeline {
     stages {
         stage('Checkout Info') {
             steps {
-                sh 'echo "Repo checked out successfully."'
-                sh 'ls -la'
-                sh 'git log -1'
+                sh 'echo "Repo checked out successfully"'
             }
         }
         stage('Build') {
@@ -16,13 +14,25 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'echo "Testing..."'
+                sh '''
+                mkdir -p test-reports
+                cat > test-reports/results.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="SampleTests" tests="3" failures="1" errors="0" skipped="0">
+    <testcase classname="sample.MathTest" name="testAddition" time="0.01"/>
+    <testcase classname="sample.MathTest" name="testSubtraction" time="0.01"/>
+    <testcase classname="sample.MathTest" name="testDivision" time="0.02">
+        <failure message="Expected 2 but got 3">AssertionError: Expected 2 but got 3</failure>
+    </testcase>
+</testsuite>
+EOF
+                '''
             }
         }
-        stage('REally') {
-            steps {
-                sh 'echo "reallying..."'
-            }
+    }
+    post {
+        always {
+            junit 'test-reports/results.xml'
         }
     }
 }
